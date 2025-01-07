@@ -1,0 +1,29 @@
+name: publish package to registry
+
+triggers:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    steps:
+      - uses: checkout
+      - uses: setup-env
+        inputs:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: lower case readme
+        run: |
+          mv README.md readme.md
+      - name: generate publish.yaml
+        run: |
+          npx -y --registry=https://registry.anpm.alibaba-inc.com  msa-tool publish
+      - name: install s
+        run: |
+          wget https://serverless-tool-images.oss-cn-hangzhou.aliyuncs.com/bin/s/0.0.13 -O s
+          chmod +x s
+      - name: release prod
+        run: |
+          export serverless_devs_registry_token=${{ secrets.ALIBABA_REGISTRY_V3_PUBLISH_TOKEN }}
+          ./s registry publish --debug

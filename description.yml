@@ -1,0 +1,41 @@
+Description: AI网关驱动企业级ChatGPT-Next-Web
+Version: 0.0.1
+Tags:
+- AI
+- 开源
+Name: nextchat-web-ai-gateway
+Service:
+  API网关:
+    Authorities:
+      - AliyunAPIGFullAccess
+  函数计算:
+    Authorities:
+      - AliyunFCFullAccess
+Parameters:
+  type: object
+  properties:
+    Icon: https://higress.io/img/higress_logo_small.png
+Project:
+  概览: |
+    一键部署您的企业级ChatGPT应用，支持多模型适配，AI安全防护，AI统计等企业级特性。使得 AI 与网关的集成更加便捷和高效。详情请查看[ChatGPT Next Web官网](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web)。
+  架构: |
+    ![](https://computenest-service-deploy-document-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/quickstart-dify/1.png)
+  部署: |
+    假设有一个Web应用，对外域名为example.com，静态页面由OSS托管，并通过云原生API网关代理静态页面以及后端服务。架构示意图如下：
+
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8070347271/CAEQTxiBgMDKn6nijBkiIDdkMzljMDEwYThjZDQyYWViMjFmYjUyYmQ5MDJjY2Mx4468809_20240628141726.469.svg)
+
+    - 所有静态页面的请求均被云原生API网关转发到OSS存储。例如，访问example.com或者example.com/index.html时，返回网站首页index.html。
+
+    - 其他业务的请求被云原生API网关转发到目标服务。例如，访问example.com/app时，返回后端服务处理请求的业务结果。
+  使用: |
+    假设您的业务域名为example.com，在浏览器地址栏分别输入example.com、example.com/index.html
+
+    已在OSS的Bucket中设置默认首页，所以在浏览器地址栏输入example.com，会返回index.html页面。
+
+    ![](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3245293761/p551346.png)
+
+
+    您也可以明确访问index.html文件。例如在浏览器地址栏输入example.com/index.html，也会返回index.html页面。
+
+    ![](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3245293761/p551348.png)
