@@ -1,10 +1,10 @@
 Parameters:
   GatewayId:
     Type: String
-    Default: 'gw-ct6jh0mm1hkndsftdgl0'
+    Default: 'gw-ctuu7lmm1hkiiernehh0'
   EnvironmentId:
     Type: String
-    Default: 'env-ct6jhlmm1hkjgpp124e0'
+    Default: 'env-ctuu89em1hkiiernekqg'
   Region:
     Type: String
     Default: 'cn-hangzhou'
@@ -18,7 +18,7 @@ Parameters:
 
 Composer:
   ChatgptWeb:
-    Template: fc3.yml
+    Component: fc3
     Properties:
       Function:
         CustomContainerConfig:
@@ -31,33 +31,33 @@ Composer:
 
   AliyunService:
     DependsOn: ChatgptWeb
-    Template: apig.service.yml
+    Component: apig.service
     Parameters:
       Port: 80
       AddressesName: {{RosOutputHostName(ChatgptWeb.HttpTrigger, "UrlIntranet")}}
       Name: {{Subfix('AliyunService')}}
 
   DashScopeService:
-    Template: apig.service.yml
+    Component: apig.service
     Parameters:
       Port: 443
       AddressesName: dashscope.aliyuncs.com
       Name: {{Subfix('DashScope')}}
 
   RouteApi:
-    Template: apig.http.api.yml
+    Component: apig.http.api
     Parameters:
-      ApiName: {{Subfix(Join(Parameters.Name, 'http'))}}
+      ApiName: {{Subfix(Join([Parameters.Name, 'http']))}}
 
   ChatgptWebRoute:
     DependsOn:
       - AliyunService
       - DashScopeService
       - RouteApi
-    Template: apig.route.yml
+    Component: apig.route
     Operation:
       ApiId: {{RosOutput(RouteApi, "HttpApiId")}}
-      Name: {{Join(Parameters.Name, 'index')}}
+      Name: {{Join([Parameters.Name, 'index'])}}
       Path: 'Prefix /'
       Scene: MultiServiceByRatio
       Services:
@@ -68,12 +68,12 @@ Composer:
           Protocol: HTTP
           Weight: 50
     Parameters:
-      HttpApiName: {{Subfix(Join(Parameters.Name, 'api'))}}
-      RouteName: {{Join(Parameters.Name, 'index')}}
+      HttpApiName: {{Subfix(Join([Parameters.Name, 'api']))}}
+      RouteName: {{Join([Parameters.Name, 'index'])}}
 
   HttpRewritePolicy:
     DependsOn: ChatgptWebRoute
-    Template: apig.router.policy.yml
+    Component: apig.router.policy
     Parameters:
       PolicyClassName: "HttpRewrite"
       PolicyConfig:
@@ -85,7 +85,7 @@ Composer:
 
   AiProxyPlugin:
     DependsOn: ChatgptWebRoute
-    Template: apig.router.plugin.yml
+    Component: apig.router.plugin
     Parameters:
       PluginClassId: pls-cqebrgh4ckt6ppatmprh
       RouteIds:
@@ -97,24 +97,24 @@ Composer:
           type: qwen
           apiTokens:
             - sk-xxx
-  RestApi:
-    Template: apig.rest.api.yml
-    Parameters:
-      ApiName: {{Subfix(Join(Parameters.Name, 'rest'))}}
+  # RestApi:
+  #   Component: apig.rest.api
+  #   Parameters:
+  #     ApiName: {{Subfix(Join([Parameters.Name, 'rest']))}}
 
-  ChatgptWebRest:
-    DependsOn: AliyunService
-    Template: apig.rest.yml
-    Operation:
-      Path: 'GET /api'
-      ApiId: {{RosOutput(RestApi, "HttpApiId")}}
-      Name: {{Join(Parameters.Name, 'ops')}}
-      Scene: SingleService
-      Services:
-        - ServiceId: {{RosOutput(AliyunService, "ServiceId")}}
-          Protocol: HTTP
-          Weight: 100
-    Parameters:
-      RestApiName: {{Subfix(Join(Parameters.Name, 'rest'))}}
-      BasePath:  /api
-      OperationName: {{Join(Parameters.Name, 'index')}}
+  # ChatgptWebRest:
+  #   DependsOn: AliyunService
+  #   Component: apig.rest
+  #   Operation:
+  #     Path: 'GET /api'
+  #     ApiId: {{RosOutput(RestApi, "HttpApiId")}}
+  #     Name: {{Join([Parameters.Name, 'ops'])}}
+  #     Scene: SingleService
+  #     Services:
+  #       - ServiceId: {{RosOutput(AliyunService, "ServiceId")}}
+  #         Protocol: HTTP
+  #         Weight: 100
+  #   Parameters:
+  #     RestApiName: {{Subfix(Join([Parameters.Name, 'rest']))}}
+  #     BasePath:  /api
+  #     OperationName: {{Join([Parameters.Name, 'index'])}}
