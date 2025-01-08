@@ -1,10 +1,10 @@
 Parameters:
   GatewayId:
     Type: String
-    Default: 'gw-ctuu7lmm1hkiiernehh0'
+    Default: 'gw-ctv18j6m1hkkjuapimeg'
   EnvironmentId:
     Type: String
-    Default: 'env-ctuu89em1hkiiernekqg'
+    Default: 'env-ctv1956m1hkiiernla5g'
   Region:
     Type: String
     Default: 'cn-hangzhou'
