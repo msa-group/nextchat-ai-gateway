@@ -59,14 +59,11 @@ Composer:
       ApiId: {{RosOutput(RouteApi, "HttpApiId")}}
       Name: {{Join([Parameters.Name, 'index'])}}
       Path: 'Prefix /'
-      Scene: MultiServiceByRatio
+      Scene: SingleService
       Services:
         - ServiceId: {{RosOutput(AliyunService, "ServiceId")}}
           Protocol: HTTP
-          Weight: 50
-        - ServiceId: {{RosOutput(DashScopeService, "ServiceId")}}
-          Protocol: HTTP
-          Weight: 50
+          Weight: 100
     Parameters:
       HttpApiName: {{Subfix(Join([Parameters.Name, 'api']))}}
       RouteName: {{Join([Parameters.Name, 'index'])}}
