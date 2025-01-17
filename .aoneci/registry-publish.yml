@@ -5,6 +5,10 @@ triggers:
     branches:
       - master
 
+envs:
+  BAILIAN_APP_ID: ${{ vars.BAILIAN_APP_ID }} 
+  BAILIAN_API_KEY: ${{ secrets.BAILIAN_API_KEY }}
+
 jobs:
   release:
     steps:
@@ -13,9 +17,9 @@ jobs:
         inputs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - name: lower case readme
+      - name: generate README
         run: |
-          mv README.md readme.md
+          npx -y --registry=https://registry.anpm.alibaba-inc.com  @ali/msa-cli generate
       - name: generate publish.yaml
         run: |
           npx -y --registry=https://registry.anpm.alibaba-inc.com  msa-tool publish
