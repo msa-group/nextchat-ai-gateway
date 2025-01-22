@@ -17,7 +17,7 @@ Parameters:
     Icon: https://higress.io/img/higress_logo_small.png
 Project:
   概览: |
-    一键部署您的企业级 ChatGPT 应用，支持多模型适配，AI 安全防护，AI 统计等企业级特性。使得 AI 与网关的集成更加便捷和高效。详情请查看[ChatGPT Next Web 官网](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web)。
+    一键部署您的企业级 ChatGPT 应用，支持多模型适配，AI 安全防护，AI 统计等企业级特性。使得 AI 与网关的集成更加便捷和高效。详情请查看[ChatGPT Next Web 官网](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web)。 
   架构: |
     ![](https://computenest-service-deploy-document-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/quickstart-dify/1.png)
   部署: |
