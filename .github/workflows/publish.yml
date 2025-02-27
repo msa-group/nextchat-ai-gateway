@@ -1,0 +1,43 @@
+name: publish package to registry
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git
+        run: git config --global core.symlinks false
+        shell: bash
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make jq curl wget
+      - name: Generate README
+        run: |
+          npx msa-tool generate -u ${{ secrets.FC_SERVICE_URL }}
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+      - name: Zip Files
+        run: |
+          zip -r "$(basename "$PWD").zip" . -x ".github/*"
+          ls -la
+      - name: Publish to OSS
+        run: |
+          npx msa-tool upload -z $(basename "$PWD").zip
+        env:
+          FC_SERVICE: ${{ secrets.FC_SERVICE }}
+          FC_TOKEN: ${{ secrets.FC_TOKEN }}

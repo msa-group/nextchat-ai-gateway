@@ -1,1 +1,0 @@
-npx -y msa-tool dev
