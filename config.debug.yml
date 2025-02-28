@@ -22,11 +22,4 @@ SceneProfiles:
       Backend:
         Cpu: 1
         Memory: 1024
-        Name: 'nextchat-backend'
-      Service:
-        Name: 'nextchat-service'
-      LLMSvc:
-        Name: 'dashscope-svc'
-      HttpApi:
-        Name: 'nextchat-http-api'
-        RouteNames: ["nextchat-route-1", "nextchat-dashscope-route-1"]
+        Handler: index.handler
