@@ -18,8 +18,15 @@ SceneProfiles:
       zh-cn: 单机版
       en: Single Service
     Template: "templates/msa.yml"
-    Parameters:
+    Parameters: 
       Backend:
         Cpu: 1
-        Memory: 4096
-        Handler: index.handler
+        Memory: 1024
+        Name: 'nextchat-backend'
+      Service:
+        Name: 'nextchat-service'
+      LLMSvc:
+        Name: 'dashscope-svc'
+      HttpApi:
+        Name: 'nextchat-http-api'
+        RouteNames: ["nextchat-route-1", "nextchat-dashscope-route-1"]

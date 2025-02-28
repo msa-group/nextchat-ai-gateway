@@ -1,8 +1,9 @@
+
 Composer:
   Backend:
     Component: fc3
     Parameters:
-      Name: {{Subfix(Parameters.Name)}}
+      Name: {{Default(Get(Parameters, 'Backend.BackendName'), Subfix(Parameters.Name))}}
       CustomContainerConfig:
         Fn::Sub:
           - '{"Port": 3000,"Image":"registry.${Region}.aliyuncs.com/oss-share/msa:chatgpt-next-web-v2", "RegistryConfig":{"CertConfig":{"Insecure":false}}}'
@@ -13,7 +14,7 @@ Composer:
     DependsOn: Backend
     Component: apig.service
     Parameters:
-      Name: {{Subfix(Join([Parameters.Name, '-','svc']))}}
+      Name: {{Default(Get(Parameters, 'Service.Name'), Subfix(Join([Parameters.Name, '-','svc'])))}}
       DnsConfig:
         AddressesName: {{RosOutputHostName(Backend.HttpTrigger, "UrlIntranet")}}
         Port: 80
@@ -21,7 +22,7 @@ Composer:
   LLMSvc:
     Component: apig.service
     Parameters:
-      Name: {{Subfix('dashscope-svc')}}
+      Name: {{Default(Get(Parameters, 'LLMSvc.Name'), Subfix('dashscope-svc'))}}
       DnsConfig:
         AddressesName: dashscope.aliyuncs.com
         Port: 443
@@ -29,9 +30,9 @@ Composer:
   HttpApi:
     Component: apig.http
     Parameters:
-      Name: {{Subfix(Join([Parameters.Name, 'http']))}}
+      Name: {{Default(Get(Parameters, 'HttpApi.Name'), Subfix(Join([Parameters.Name, 'http'])))}}
       Routes:
-        - Name: index
+        - Name: {{Default(Get(Parameters, 'HttpApi.RouteNames[0]'), 'index')}}
           Path: 
             Type: Prefix
             Value: '/'
@@ -46,7 +47,7 @@ Composer:
                 Fn::Sub:
                   - '{"pathType":"Prefix","host":"${HOST}","enable":true}'
                   - HOST: {{RosOutputHostName(Backend.HttpTrigger, "UrlIntranet")}}
-        - Name: dashscope
+        - Name: {{Default(Get(Parameters, 'HttpApi.RouteNames[1]'), 'dashscope')}}
           Path: 
             Type: Prefix
             Value: '/v1/chat/completions'
