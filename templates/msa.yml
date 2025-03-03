@@ -51,6 +51,8 @@ Composer:
           Path: 
             Type: Prefix
             Value: '/v1/chat/completions'
+          Methods:
+            - POST
           Scene: SingleService
           Services:
             - ServiceId: {{RosOutput(LLMSvc, "ServiceId")}}
