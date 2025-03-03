@@ -50,7 +50,7 @@ Composer:
         - Name: {{Default(Get(Parameters, 'HttpApi.RouteNames[1]'), 'dashscope')}}
           Path: 
             Type: Prefix
-            Value: '/v1/chat/completions'
+            Value: '/v1'
           Methods:
             - POST
           Scene: SingleService
